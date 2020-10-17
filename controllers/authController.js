@@ -1,5 +1,6 @@
 const User = require('../models/user.js')
 
+//Function to handle errors
 const handleErrors = (err) => {
     let errors = { email: '', password: '' }
     if (err.code === 11000) {
@@ -14,6 +15,7 @@ const handleErrors = (err) => {
     return errors
 }
 
+//Route Controllers
 module.exports.index = (req,res)=>{
     res.render('home')
 }
