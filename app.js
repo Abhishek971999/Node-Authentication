@@ -9,9 +9,10 @@ const PORT = process.env.PORT ||3000
 app.use(express.static('public'));
 app.use(express.json())
 app.use(cookieParser())
+app.get('*')
 app.use(authRoutes)
 
 // View engine
-app.set('view engine', 'ejs');
+app.set('view engine', 'ejs');                        
 
 app.listen(PORT,()=>console.log('Server listening to 3000'))
