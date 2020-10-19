@@ -3,7 +3,14 @@ const User = require('../models/user.js')
 
 //Function to handle errors
 const handleErrors = (err) => {
+    console.log(err.message,err.code)
     let errors = { email: '', password: '' }
+    if(err.message=='Email not found'){
+        errors.email = err.message;
+    }
+    if(err.message=='Wrong Password'){
+        errors.password = err.message;
+    }
     if (err.code === 11000) {
         errors.email = 'Email is already registered';
         return errors;
@@ -12,7 +19,7 @@ const handleErrors = (err) => {
         Object.values(err.errors).forEach(({ properties }) => {
           errors[properties.path] = properties.message;
         });
-      }
+    }
     return errors
 }
 
@@ -48,6 +55,15 @@ module.exports.signup_post = async (req, res) => {
 module.exports.login_get = (req,res)=>{
     res.render('login')
 }
-module.exports.login_post = (req,res)=>{
-    res.send('login post')
+module.exports.login_post = async(req,res)=>{
+    const {email,password} = req.body
+    try {
+        const user = await User.login(email,password)
+        const token = createToken(user._id)
+       res.cookie('jwt',token,{httpOnly:true,maxAge:maxTokenAge})
+        res.status(200).json({user:user._id})
+    } catch (error) {
+        const errors = handleErrors(error);
+        res.status(400).json({ errors });
+    }
 }
