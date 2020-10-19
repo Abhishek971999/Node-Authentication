@@ -6,7 +6,7 @@ const router = Router()
 //Routes
 router.get('*',checkUser)
 router.get('/',index)
-router.get('/smoothies',requireAuth,smoothies)
+router.get('/protected',requireAuth,smoothies)
 router.get('/signup',signup_get)
 router.post('/signup',signup_post)
 router.get('/login',login_get)
